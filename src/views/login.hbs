@@ -1,0 +1,26 @@
+{{!-- giao dien login --}}
+<form action="/login" method="POST">
+    <div class="input-field">
+        <label for="username">Tên đăng nhập:</label>
+        <input type="text" id="username" name="username" value={{username}}>
+        <p style="color: red; height: 10px;">
+            {{#if errors.username}}
+            {{errors.username}}
+            {{/if}}
+        </p>
+    </div>
+    <div class="input-field">
+        <label for="password">Mật khẩu:</label>
+        <input type="password" id="password" name="password">
+        <p style="color: red; height: 10px;">
+            {{#if errors.password}}
+            {{errors.password}}
+            {{/if}}
+            {{#if message}}
+            {{message}}
+            {{/if}}
+        </p>
+    </div>
+
+    <button type="submit">Login</button>
+</form>

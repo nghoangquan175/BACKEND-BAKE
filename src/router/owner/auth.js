@@ -2,12 +2,16 @@ import express from 'express'
 
 import {
     loginStaff,
-    logoutStaff
+    logoutStaff,
+    showLoginForm
 } from "../../controller/owner/authController"
 
 const router = express.Router();
 
-router.post("/login", loginStaff)
+
+
+router.use("/login", loginStaff)
+
 router.post("/logout", logoutStaff)
 
 export default router

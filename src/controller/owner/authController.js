@@ -3,39 +3,52 @@ import sql from "mssql"
 import jwt from "jsonwebtoken"
 import 'dotenv/config'
 
+const showLoginForm = async (req, res) => {
+    res.render('login', { layout: 'login' });
+}
+
+
 const loginStaff = async (req, res) => {
-    try {
-        if ((!req.body.phoneNumber && !req.body.email) || !req.body.password) {
-            return res.status(400).json({
-                message: 'mising body!',
-                code: '-1',
-                data: ''
-            })
-        }
+    const { username, password } = req.body;
+    const errors = {};
 
-        const result = await authCustomer.loginUser(req.body)
-        res.cookie("refreshtoken", result.data.refreshtoken, {
-            httpOnly: true,
-            secure: false,
-            sameSite: 'strict',
-            path: '/',
-            maxAge: (7 * 24 * 60 * 60 * 1000)
-        })
-
-        return res.status(200).json({
-            message: result.message,
-            code: result.code,
-            data: {
-                accesstoken: result.data.accesstoken,
-                username: result.data.username
-            }
-        })
-    } catch (error) {
-        res.status(500).json({
-            message: 'Loi server!',
-            code: '-1',
-        })
+    // Kiểm tra dữ liệu đầu vào
+    if (!username || username.trim() === '') {
+        errors.username = 'Tên đăng nhập trống!';
     }
+    if (!password || password.trim() === '') {
+        errors.password = 'Mật khẩu trống!';
+    }
+
+    if (Object.keys(errors).length > 0) {
+        return res.render('login', {
+            layout: 'login',
+            errors,
+            username
+        });
+    }
+
+    const user = await sql.query`
+                    SELECT staff_id, staff_name, staff_role
+                    FROM Store_Users
+                    WHERE staff_name = ${username} and staff_password = ${password}
+                `
+
+    if (!user?.recordset[0]) {
+        return res.render('login', {
+            layout: 'login',
+            message: 'Tên đăng nhập hoặc mật khẩu sai!',
+            username
+        });
+    }
+
+    req.session.user = {
+        id: user.recordset[0].staff_id,
+        name: user.recordset[0].staff_name,
+        role: user.recordset[0].staff_role
+    };
+
+    res.redirect('/home');
 }
 
 const logoutStaff = (req, res) => {
@@ -67,6 +80,7 @@ const logoutStaff = (req, res) => {
 }
 
 module.exports = {
+    showLoginForm,
     loginStaff,
     logoutStaff
 }
