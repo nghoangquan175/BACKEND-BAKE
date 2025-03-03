@@ -45,6 +45,7 @@ const loginUser = async (req, res) => {
         }
 
         const result = await authCustomer.loginUser(req.body)
+
         res.cookie("refreshtoken", result.data.refreshtoken, {
             httpOnly: true,
             secure: false,

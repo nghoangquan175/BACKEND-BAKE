@@ -1,7 +1,8 @@
 
 const home = async (req, res) => {
+
     res.render('home', {
-        username: req.session.user.name
+        username: req.session?.user?.name
     })
 }
 

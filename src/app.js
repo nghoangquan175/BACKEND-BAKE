@@ -10,9 +10,11 @@ import connectDB from "./config/configSQLserver";
 import configCors from "./config/configCors";
 import configTemplateEngine from "./config/configTemplateEngine";
 import configSession from "./config/configSession";
-import upload from "./config/configUploadFile"
 
 const app = express()
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 connectDB(sql)
 app.use(cookieParser())

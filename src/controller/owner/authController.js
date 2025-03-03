@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken"
 import 'dotenv/config'
 
 const showLoginForm = async (req, res) => {
+
     res.render('login', { layout: 'login' });
 }
 
@@ -48,35 +49,17 @@ const loginStaff = async (req, res) => {
         role: user.recordset[0].staff_role
     };
 
-    res.redirect('/home');
+    res.redirect('/create-product');
 }
 
 const logoutStaff = (req, res) => {
-    try {
-        res.clearCookie("accesstoken", {
-            httpOnly: true,
-            secure: false,
-            sameSite: 'strict',
-            path: '/',
-        });
-
-        res.clearCookie("refreshtoken", {
-            httpOnly: true,
-            secure: false,
-            sameSite: 'strict',
-            path: '/',
-        });
-
-        return res.status(200).json({
-            message: "Đăng xuất thành công!",
-            code: '1',
-        });
-    } catch (error) {
-        return res.status(500).json({
-            message: "Lỗi server!",
-            code: '-1'
-        });
-    }
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error clearing session:', err);
+            return res.status(500).send('Không thể logout!');
+        }
+        res.redirect('/login');
+    });
 }
 
 module.exports = {

@@ -11,7 +11,6 @@ const initRouterWeb = (app) => {
 
     //store
     app.use("/", storeRoute)
-
 }
 
 export default initRouterWeb

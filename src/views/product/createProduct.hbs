@@ -1,0 +1,49 @@
+<h1>Trang tạo sản phẩm</h1>
+<a href="/get-products" type="button" class="btn btn-link">Tất cả sản phẩm</a>
+<form class="mt-4" action="/save-product" method="post" enctype="multipart/form-data">
+
+    <div class="mb-3">
+        <label for="uploaded_file" class="form-label">Ảnh sản phẩm</label>
+        {{#if errors.uploaded_file}}
+        <span style="color: red;">: {{errors.uploaded_file}}</span>
+        {{/if}}
+        <input type="file" class="form-control" id="uploaded_file" name="uploaded_file" required="true">
+
+    </div>
+    <div class="mb-3">
+        <label for="name" class="form-label">Tên sản phẩm</label>
+        <input type="text" class="form-control" id="name" name="name" aria-describedby="nameHelp" required="true"
+            value={{isFieldsValid data 'name' }}>
+    </div>
+    <div class="mb-3">
+        <label for="des" class="form-label">Mô tả sản phẩm</label>
+        <input type="text" class="form-control" id="des" name="des" aria-describedby="nameHelp" required="true"
+            value={{isFieldsValid data 'des' }}>
+    </div>
+    <div class="mb-3">
+        <label for="size" class="form-label">Kích thước</label>
+        {{#if errors.size}}
+        <span style="color: red;">: {{errors.size}}</span>
+        {{/if}}
+        <input type="text" class="form-control" id="size" name="size" aria-describedby="nameHelp" required="true"
+            value={{isFieldsValid data 'size' }}>
+    </div>
+    <div class="mb-3">
+        <label for="price" class="form-label">Giá gốc</label>
+        {{#if errors.price}}
+        <span style="color: red;">: {{errors.price}}</span>
+        {{/if}}
+        <input type="number" class="form-control" id="price" name="price" aria-describedby="nameHelp" required="true"
+            value={{isFieldsValid data 'price' }}>
+    </div>
+    <div class="mb-3">
+        <label for="discounted_price" class="form-label">Giá khuyến mãi</label>
+        {{#if errors.discounted_price}}
+        <span style="color: red;">: {{errors.discounted_price}}</span>
+        {{/if}}
+        <input type="number" class="form-control" id="discounted_price" name="discounted_price"
+            aria-describedby="nameHelp" required="true" value={{isFieldsValid data 'discounted_price' }}>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
