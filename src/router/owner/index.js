@@ -26,6 +26,8 @@ router.get('/get-products', verifyStaff, productController.showProducts)
 router.get('/create-product', verifyStaff, productController.showCreateProducForm)
 router.post('/save-product', verifyStaff, productController.saveNewProduct)
 
+router.post('/update-product/:id', verifyStaff, productController.updateProduct)
+
 //Customer
 router.get('/get-customers', verifyStaff, customerController.showCustomers)
 

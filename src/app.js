@@ -16,7 +16,9 @@ const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-connectDB(sql)
+(async () => {
+    global.pool = await connectDB(sql);
+})();
 app.use(cookieParser())
 
 configSession(app)

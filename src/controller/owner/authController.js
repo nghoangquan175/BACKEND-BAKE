@@ -1,7 +1,9 @@
 import bcrypt from "bcrypt"
-import sql from "mssql"
+
 import jwt from "jsonwebtoken"
 import 'dotenv/config'
+
+import authRepository from '../../repositories/owner/authRepository'
 
 const showLoginForm = async (req, res) => {
 
@@ -29,11 +31,8 @@ const loginStaff = async (req, res) => {
         });
     }
 
-    const user = await sql.query`
-                    SELECT staff_id, staff_name, staff_role
-                    FROM Store_Users
-                    WHERE staff_name = ${username} and staff_password = ${password}
-                `
+    const user = await authRepository.handleLoginStaff(username, password)
+
 
     if (!user?.recordset[0]) {
         return res.render('login', {

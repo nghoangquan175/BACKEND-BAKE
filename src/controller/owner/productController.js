@@ -6,10 +6,18 @@ import productValidator from "../../validators/productValidator"
 
 import form from '../../config/configFormidable';
 
-const showProducts = (req, res) => {
+const showProducts = async (req, res) => {
+    const respon = await productRepository.getProducts()
+
     res.render('product/productManage', {
         username: req.session?.user?.name,
         message: req.query.message,
+        data: respon.data,
+        helpers: {
+            plusOne: function (index) {
+                return index + 1
+            },
+        }
     })
 }
 
@@ -29,7 +37,6 @@ const showCreateProducForm = (req, res) => {
 }
 
 const saveNewProduct = async (req, res, next) => {
-
     let data = {}
     form.on('field', (name, value) => {
         data = {
@@ -79,8 +86,20 @@ const saveNewProduct = async (req, res, next) => {
     });
 }
 
+const updateProduct = async (req, res) => {
+    let product_id = req.params.id
+
+    const product = productRopository.getProductByID(product_id)
+
+    res.render('product/updateProduct', {
+        product: product
+    })
+}
+
+
 module.exports = {
     showProducts,
     showCreateProducForm,
-    saveNewProduct
+    saveNewProduct,
+    updateProduct
 }

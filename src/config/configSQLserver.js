@@ -18,10 +18,16 @@ const sqlConfig = {
 
 const connectDB = async (sql) => {
     try {
-        await sql.connect(sqlConfig)
+        // await sql.connect(sqlConfig)
+
+        const pool = new sql.ConnectionPool(sqlConfig);
+        const poolConnect = pool.connect();
+        await poolConnect;
         console.log("Connect Successfully!!!")
+        return pool;
     } catch (err) {
         console.log("Connect Failure!!!", err)
+        process.exit(1)
     }
 }
 

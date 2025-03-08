@@ -2,7 +2,128 @@
     <h1>Trang sản phẩm</h1>
     <a href="/create-product" type="button" class="btn btn-link">Tạo sản phẩm</a>
     <a href="/trash-product" type="button" class="btn btn-link">Thùng rác</a>
-    {{!-- {{#if message}}
-    {{/if}} --}}
+    {{#if message}}
     <div class="alert alert-success">{{message}}</div>
+    {{/if}}
+
+    <form name="container-form" method="POST" action="http://localhost:3000/me/deleteitems">
+        <button type="submit" class="btn btn-danger" id="buttonDeleteItems" disabled="true">
+            Chuyển vào thùng rác
+        </button>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr class="text-center">
+                    <th scope="col">#</th>
+                    <th scope="col">
+                        Name
+                    </th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Sold</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Discounted</th>
+                    <th scope="col" colspan="2">Create</th>
+                    <th scope="col" colspan="2">Update</th>
+                    <th scope="col" colspan="1"> Chức năng</th>
+                    <th scope="col" colspan="1">
+                        <input type="checkbox" class="form-check-input checkAll" id="checkAll">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#if data}}
+                {{#each data}}
+                <tr>
+                    <th scope="row"> {{plusOne @index}}</th>
+                    <td>{{ product_name }}</td>
+                    <td>{{ size }}</td>
+                    <td>{{ quantity_sold }}</td>
+                    <td>{{ price }}</td>
+                    <td>{{ discounted_price }}</td>
+                    <td colspan="2">{{ created_at }}</td>
+                    <td colspan="2">{{ updated_at }}</td>
+                    <td colspan="1" class="text-center">
+                        <a href="/update-product/{{product_id}}" class="btn btn-link">Chỉnh sửa</a>
+                        {{!-- <a href="#" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                            data-id="{{_id}}">
+                            Chuyển vào thùng rác
+                        </a> --}}
+                    </td>
+                    <td class="text-center">
+                        <input type="checkbox" class="form-check-input checkItem" value="{{product_id}}"
+                            name="checkItem">
+                    </td>
+                </tr>
+                {{/each}}
+                {{else}}
+                <tr class="text-center">
+                    <td colspan="5 text-center">
+                        <h4>
+                            Bạn không có mặt hàng nào,<a href="/create-product" type="button" class="btn btn-link">hãy
+                                tạo mặt hàng</a>
+                        </h4>
+                    </td>
+                </tr>
+                {{/if}}
+            </tbody>
+        </table>
+    </form>
 </div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Chuyển vào thùng rác?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn chắc chắn muốn chuyển phần tử vào thùng rác?
+            </div>
+            <div class="modal-footer">
+                <button id="deleteButton" type="button" class="btn btn-danger">Chuyển vào thùng rác</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form name="deleteForm" action="POST"></form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteModal = document.getElementById('deleteModal')
+        deleteModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget
+            const id = button.getAttribute('data-id')
+
+            const deleteForm = document.forms['deleteForm']
+            deleteForm.action = `http://localhost:3000/me/delete/${id}`
+
+            const deleteButton = document.getElementById('deleteButton')
+            deleteButton.addEventListener('click', () => {
+                deleteForm.submit()
+            })
+        })
+
+        const checkAll = $("#checkAll")
+        const checkItem = $('input[name="checkItem"]')
+        const allCheckbox = $('input[type="checkbox"]')
+        const buttonDeleteItems = $("#buttonDeleteItems")
+        checkAll.change(function () {
+            let isCheckAll = $(this).prop('checked')
+            checkItem.prop('checked', isCheckAll)
+        })
+
+        checkItem.change(function () {
+            const itemChecked = $('input[name="checkItem"]:checked')
+            checkAll.prop('checked', itemChecked.length === checkItem.length)
+        })
+
+        allCheckbox.change(() => {
+            buttonDeleteItems.prop("disabled", !($('input[name="checkItem"]:checked').length))
+        })
+
+    })
+
+</script>

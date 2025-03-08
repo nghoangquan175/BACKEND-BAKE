@@ -4,7 +4,7 @@
   "main": "src/app.js",
   "scripts": {
     "start": "nodemon --inspect --exec babel-node src/app.js",
-    "watch": "node-sass --watch src/resources/scss/ --output src/public/css/",
+    "watch": "node-sass --watch src/resources/scss --output src/public/css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "quan",

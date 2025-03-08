@@ -1,0 +1,30 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+#block {
+    overflow: hidden;
+}
+
+.slider {
+    width: 15%;
+}
+
+.slider-content {
+    position: fixed;
+    width: 15%;
+}
+
+.content {
+    flex: 1;
+    min-height: 100vh;
+    padding: 10px;
+    background-color: #f8f9fa;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+    /* Màu xám nhạt cho hàng chẵn */
+}
